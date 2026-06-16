@@ -2,6 +2,7 @@ package com.exampro.app.di
 
 import com.exampro.app.data.api.*
 import com.exampro.app.data.repository.AuthRepository
+import com.exampro.app.data.repository.SettingsRepository
 import com.russhwolf.settings.Settings
 import io.ktor.client.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -39,9 +40,19 @@ val appModule = module {
     // 4. The AuthRepository Singleton
     // get() automatically injects AuthApi, DeviceApi, and Settings
     single { AuthRepository(get(), get(), get()) }
+    single { SettingsRepository(get()) }
 }
 
-fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
+
+
+
+fun initKoin(
+    additionalModules: List<org.koin.core.module.Module> = emptyList(),
+    appDeclaration: KoinAppDeclaration = {}
+) = startKoin {
+    // This executes the lambda from MyApp.kt (containing androidContext)
     appDeclaration()
-    modules(appModule)
+
+    // This loads both the common shared modules and the platform-specific modules
+    modules(appModule + additionalModules)
 }
