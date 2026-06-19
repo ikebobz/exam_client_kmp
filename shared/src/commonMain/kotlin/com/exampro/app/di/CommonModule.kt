@@ -1,6 +1,8 @@
 package com.exampro.app.di
 
 import com.exampro.app.data.api.*
+import com.exampro.app.data.db.AppDatabase
+import com.exampro.app.data.db.dao.*
 import com.exampro.app.data.repository.AuthRepository
 import com.exampro.app.data.repository.SettingsRepository
 import com.russhwolf.settings.Settings
@@ -11,6 +13,10 @@ import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
+import com.exampro.app.data.repository.SyncRepository
+import com.exampro.app.data.repository.SubjectRepository
+import com.exampro.app.data.repository.StudyProgressRepository
+
 
 val appModule = module {
     // 1. The HttpClient (Singleton)
@@ -36,11 +42,23 @@ val appModule = module {
     single { SubjectApi(get()) }
     single { QuestionApi(get()) }
     single { DashboardApi(get()) }
+    single {get<AppDatabase>().examDao()}
+    single {get<AppDatabase>().subjectDao()}
+    single {get<AppDatabase>().bookmarkDao()}
+    single { get<AppDatabase>().studyProgressDao()}
+
+
+
+
+
 
     // 4. The AuthRepository Singleton
     // get() automatically injects AuthApi, DeviceApi, and Settings
     single { AuthRepository(get(), get(), get()) }
     single { SettingsRepository(get()) }
+    single { SyncRepository(get(), get(), get(), get(), get(), get(), get(), get(), get()) }
+    single { SubjectRepository( get() ) }
+    single { StudyProgressRepository(get()) }
 }
 
 
