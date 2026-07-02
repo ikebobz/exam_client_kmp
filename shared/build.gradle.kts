@@ -88,7 +88,7 @@ android {
 // ADDED THIS: Link the Room Compiler to your targets
 dependencies {
     add("kspCommonMainMetadata", libs.room.compiler)
-    //add("kspIosSimulatedArm64", libs.room.compiler)
+    add("kspIosSimulatorArm64", libs.room.compiler)
     add("kspIosArm64", libs.room.compiler)
     configurations.configureEach {
         if (name.contains("kspAndroid", ignoreCase = true)) {
